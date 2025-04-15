@@ -26,8 +26,10 @@ class counting_sort:
             output_arr[counting_arr[lst[i]] - 1] = lst[i]
             counting_arr[lst[i]] -= 1
 
+        for i in range(0, len(lst)):
+            lst[i] = output_arr[i]
 
-        return output_arr
+        return lst
 
 if __name__ == "__main__":
     a = [_ for _ in range(0, 5)]
