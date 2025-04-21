@@ -2,11 +2,11 @@ import socket
 from typing import List
 
 
-addr: str = "hankku.home.com"
+addr: str = "cloud.internal.home"
 
 try:
     result= socket.getaddrinfo(addr, 80)
-    print(result)
+    print("test:", result)
 
 except Exception as e:
     print("fail-getaddrifo:",e)
