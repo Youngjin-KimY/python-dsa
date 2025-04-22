@@ -35,5 +35,10 @@ class test(unittest.TestCase):
         ans = self.instance.lengthOfLongestSubstring(input)
         self.assertEqual(ans, 1)
 
+    def test7(self):
+        input: str = "tmmzuxt"
+        ans = self.instance.lengthOfLongestSubstring(input)
+        self.assertEqual(ans, 5)
+
 if __name__ == "__main__":
     unittest.main()
