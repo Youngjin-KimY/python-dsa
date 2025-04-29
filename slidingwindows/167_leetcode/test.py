@@ -1,11 +1,11 @@
 import unittest
 from main import Solution
-
+from main_2 import Solution as s2
 from typing import List
 
 class test(unittest.TestCase):
     def setUp(self):
-        self.instance = Solution()
+        self.instance = s2()
     
 
     def test1(self):
