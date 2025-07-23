@@ -7,15 +7,19 @@ class test(unittest.TestCase):
         self.test_instance = Solution()
 
     def test1(self):
-        g = []
-        c = []
+        g = [1,2,3,4,5]
+        c = [3,4,5,1,2]
         res=self.test_instance.canCompleteCircuit(g,c)
         ans = 0
         self.assertEqual(res,ans)
         
 
     def test2(self):
-        pass
+        g = [2,3,4]
+        c = [3,4,3]
+        res=self.test_instance.canCompleteCircuit(g,c)
+        ans = 0
+        self.assertEqual(res,ans)
 
     def test3(self):
         pass
