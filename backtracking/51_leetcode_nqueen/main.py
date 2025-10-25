@@ -1,129 +1,68 @@
-from typing import List, Tuple
+from typing import List
 
 class Solution:
-
-    def deepcopy2d(self, chessBoard: List[List[str]]) -> List[List[str]]:
-        n = len(chessBoard)
-        tmp = [["." for _ in range(n)] for _ in range(n)]
-        for y in range(n):
-            for x in range(n):
-                tmp[y][x] = chessBoard[y][x]
-        
-        return tmp
-
-    def checkRoomAndNumQeen(self, chessBoard: List[List[str]]) -> Tuple[bool, int]:
-        x = len(chessBoard[0])
-        y = len(chessBoard)
-        resRoom = False
-        resNumQueen = 0
-        for yy in range(y):
-            for xx in range(x):
-                if chessBoard[yy][xx] == 'Q':
-                    resNumQueen+=1
-                if chessBoard[yy][xx] == '.':
-                    resRoom = True
-        
-        return (resRoom, resNumQueen)
-    
-
-    def convertChessBoard(self, chessBoard: List[List[str]]) -> List[List[str]]:
-        res = []
-        n = len(chessBoard)
-        
-        tmp = self.deepcopy2d(chessBoard)
-
-        for y in range(n):
-            for x in range(n):
-                if chessBoard[y][x] == 'X':
-                    tmp[y][x] = '.'
-            res.append(''.join(tmp[y]))
-        
-        return res
-    
-    def blockChessBoard(self, x: int, y: int, chessBoard: List[List[str]]) -> List[List[str]]:
-        n = len(chessBoard)
-        
-        for dx in range(len(chessBoard)):
-            if chessBoard[y][dx] == '.':
-                chessBoard[y][dx] = 'X'
-        
-        for dy in range(len(chessBoard)):
-            if chessBoard[dy][x] == '.':
-                chessBoard[dy][x] = 'X'
+    def isSafe(self, x: int, y: int, board: List[List[str]]) -> bool:
+        n = len(board)
         
         dx, dy = x-1, y-1
-        while True:
-            if dx < 0 or dy < 0:
-                break
-            chessBoard[dy][dx] = 'X'
+        while dx >= 0 and dy >= 0:
+            if board[dy][dx] == 'Q':
+                return False
             dx -= 1
             dy -= 1
-        
-        dx, dy = x+1, y+1
-        while True:
-            if dx >= n or dy >= n:
-                break
-            chessBoard[dy][dx] = 'X'
-            dx += 1
-            dy += 1
         
         dx, dy = x+1, y-1
-        while True:
-            if dx >= n or dy < 0:
-                break
-            chessBoard[dy][dx] = 'X'
+        while dx < n and dy >= 0:
+            if board[dy][dx] == 'Q':
+                return False
             dx += 1
             dy -= 1
-
-
-        dx, dy = x-1, y+1
-        while True:
-            if dx < 0 or dy >= n:
-                break
-            chessBoard[dy][dx] = 'X'
-            dx -= 1
-            dy += 1
         
-        return chessBoard
+        dy = y-1
+        while dy >= 0:
+            if board[dy][x] == 'Q':
+                return False
+            dy -= 1
 
-    def solveNQueens(self, n: int) -> List[List[str]]:
+        return True
+    
+    def merge(self, board: List[List[str]]) -> List[str]:
         res = []
-        inner = []
-        chessBoard = []
-
-        for __ in range(n):
-            for _ in range(n):
-                inner.append('.')
-            chessBoard.append(inner[:])
-            inner = []
-
-
-        def backracking(beforeChessBoard: List[List[str]]):
-            isRoom, numQ = self.checkRoomAndNumQeen(beforeChessBoard)
-            if not isRoom:
-                if n == numQ:
-                    convertedChessboard = self.convertChessBoard(beforeChessBoard)
-                    
-                    if convertedChessboard not in res:
-                        res.append(convertedChessboard)
-
-                    return
-            newChessBoard = self.deepcopy2d(beforeChessBoard)
-            for y in range(n):
-                for x in range(n):
-                    if beforeChessBoard[y][x] == '.':
-                        newChessBoard[y][x] = 'Q'
-                        filledblockChessBoard = self.blockChessBoard(x,y,newChessBoard)
-                        backracking(self.deepcopy2d(filledblockChessBoard))
-                        newChessBoard = self.deepcopy2d(beforeChessBoard)
-
-        backracking(chessBoard)
+        n: int = len(board)
+        
+        for i in range(n):
+            r = ''
+            for j in range(n):
+                r += board[i][j]
+            res.append(r)
 
         return res
 
-# a = "...."
-# a = list(a)
-# b = a[:]
-# b[0] = 'a'
-# print(''.join(a), ''.join(b))
-        
+
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        board: List[List[str]] = [["." for _ in range(n)] for _ in range(n)]
+
+        res: List[List[str]] = []
+        def dfs(row: int):
+            if row == n:
+                onesetboard = self.merge(board)
+                res.append(onesetboard)
+
+                return
+            
+            for col in range(n):
+                if self.isSafe(col, row, board):
+                    board[row][col] = 'Q'
+                    dfs(row+1)
+                    board[row][col] = '.'
+            
+        dfs(0)
+
+        return res
+
+
+# a = ['a','v','c']
+# t = ''
+# for i in range(3):
+#     t += a[i]
+# print(t)
